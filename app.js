@@ -5,10 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+
 var app = express();
+
 var mongoose = require('mongoose');
+var passport = require('passport');
 
 //connect to our local MongoDB instance
 mongoose.connect('mongodb://localhost/news', function(err,db){
@@ -21,7 +22,11 @@ mongoose.connect('mongodb://localhost/news', function(err,db){
 
 require('./models/Posts');
 require('./models/Comments');
+require('./models/users');
+require('./config/passport');
 
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
 
 // view engine setup
@@ -35,9 +40,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 app.use('/', routes);
 app.use('/users', users);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,10 +1,12 @@
 app.controller('MainCtrl',[
   '$scope',
   'posts',
-  function($scope,posts){
+  'auth',
+  function($scope,posts,auth){
 
 
     $scope.posts = posts.posts;
+    $scope.isLoggedIn = auth.isLoggedIn;
 
     $scope.addPost = function() {
       if(!$scope.title || $scope.title === '') {return;}
